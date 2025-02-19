@@ -1,0 +1,1 @@
+var a={production:!1,webUrl:"http://localhost:4200",apiBaseUrl:"http://192.168.1.38:5050/api/",allowedDomains:"example.com",disallowedRoutes:"",dummyGUID:"38a7d413a5b75ab66d6dbd77ab3b89ae"};export{a};
