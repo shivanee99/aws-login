@@ -19,13 +19,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
           aws-region: us-east-1
       
-      - name: Launch Ec2 instance
-        run: |
-          aws ec2 run-instances \
-          --image-id ami-04b4f1a9cf54c11d0 \  
-          --count 1 \
-          --instance-type t2.micro \
-          --key-name github-action \  # Replace with your key pair
-          --security-groups default \  # Replace with your security group
-          --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActions-EC2}]'
-    
+   
