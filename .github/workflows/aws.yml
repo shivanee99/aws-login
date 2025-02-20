@@ -25,15 +25,12 @@ jobs:
           echo "${{ secrets.EC2_PEM_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 13.232.75.140 >> ~/.ssh/known_hosts
-        shell: bash
+      
+      - name:  ec2-connect
+        run:
+         ssh -i ${{secrets.EC2_PEM_KEY}} ${{secrets.USER}}@${{HOST_IP}}
+         cd /home/ubuntu
 
-      - name: Debug SSH Key
-        run: |
-          echo "Checking SSH Key..."
-          ls -l ~/.ssh
-          cat ~/.ssh/id_rsa
-      - name: connect-ec2   
-        run:   
-           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@13.232.75.140 "ls -la /home/ubuntu"
+      
           
       
