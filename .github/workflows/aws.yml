@@ -27,11 +27,9 @@ jobs:
           ssh-keyscan -H 13.232.75.140 >> ~/.ssh/known_hosts
         shell: bash
 
-      - name: Debug SSH Key (Check if it exists)
-        run:  ls -l ~/.ssh
-        
       - name: Debug SSH Key
         run: |
+          echo "Checking SSH Key..."
           ls -l ~/.ssh
-          cat ~/.ssh/id_rsa || echo "SSH Key is missing"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o IdentitiesOnly=yes ubuntu@13.232.75.140 "echo 'SSH Connection Successful'"
+          cat ~/.ssh/id_rsa | head -5 || echo "SSH Key is missing"
+      
