@@ -33,7 +33,7 @@ jobs:
           ls -l ~/.ssh
           echo "Key size:"
           wc -c ~/.ssh/id_rsa
-          ssh -i ${{secrets.EC2_PEM_KEY}} ubuntu@13.232.75.140 -y
+          ssh -o StrictHostKeyChecking=no -i ${{secrets.EC2_PEM_KEY}} ubuntu@13.232.75.140 -y
           ls -la
           
       
