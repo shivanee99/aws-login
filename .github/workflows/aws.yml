@@ -22,16 +22,13 @@ jobs:
       - name: Set up SSH Key from Variables
         run: |
           mkdir -p ~/.ssh
-          echo "${{ vars.EC2_PEM_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ vars.EC2_PEM_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 13.232.75.140 >> ~/.ssh/known_hosts
-      
-      - name: SSH-into-ec2
-        run: |
-         ssh -o StrictHostKeyChecking=no -i ~/.ssh/node.pem ubuntu@13.232.75.140 
-         ls -la /home/ubuntu
+          ssh-keyscan -H 13.232.75.140 >> ~/.ssh/known_hosts
+        shell: bash
 
-
+      - name: Debug SSH Key (Check if it exists)
+        run: ls -l ~/.ssh && cat ~/.ssh/id_rsa || echo "SSH Key is missing"
 
     
    
