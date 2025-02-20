@@ -28,7 +28,7 @@ jobs:
       
       - name:  ec2-connect
         run:
-         ssh -i ${{secrets.EC2_PEM_KEY}} ${{secrets.USER}}@${{HOST_IP}}
+         ssh -i ${{secrets.EC2_PEM_KEY}} ${{secrets.USER}}@13.232.75.140
          cd /home/ubuntu
 
       
