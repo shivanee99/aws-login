@@ -32,4 +32,4 @@ jobs:
       - name: SSH into server
         run: |
 
-          ssh ${{ secrets.USER }}@${{ secrets.SSH_HOST }}
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.SSH_HOST }}
