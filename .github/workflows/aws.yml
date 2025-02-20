@@ -26,15 +26,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 13.232.75.140 >> ~/.ssh/known_hosts
 
-      - name: Debug SSH Key (Check if it exists)
-        run: ls -la ~/.ssh && cat ~/.ssh/id_rsa || echo "SSH Key is missing"
-
-      - name: SSH into EC2 and Run Commands
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_PEM_KEY }} ${{ secrets.USERNAME }}@3.111.34.109
-          echo "Connected to EC2"
-          ls -la /home/ubuntu
-
       
           
       
