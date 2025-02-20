@@ -27,7 +27,7 @@ jobs:
           ssh-keyscan 13.232.75.140 >> ~/.ssh/known_hosts
       
       - name: SSH-into-ec2
-      - run: |
+        run: |
          ssh -i ~/.ssh/node.pem ubuntu@13.232.75.140 "ls -l /home/ubuntu"      
 
 
