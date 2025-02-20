@@ -27,11 +27,6 @@ jobs:
           ssh-keyscan 13.232.75.140 >> ~/.ssh/known_hosts
       
       - name: SSH-into-ec2
-        uses: aws-actions/amazon-ec2-instance-connect@v1
-        with:
-
-          instance-id: i-080d2917d0c94cbc9
-
       - run: |
 
          ssh -i ~/.ssh/node.pem ubuntu@13.232.75.140 "ls -l /home/ubuntu"      
