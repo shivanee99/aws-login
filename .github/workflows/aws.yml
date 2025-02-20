@@ -19,8 +19,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
           aws-region: us-east-1
 
-      - name: Deploy static website
-        run: aws s3 sync . s3://github--2 --delete
+      - name: Set up SSH Key from Variables
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ vars.EC2_PEM_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan your-ec2-public-ip >> ~/.ssh/known_hosts
+
+
 
     
    
