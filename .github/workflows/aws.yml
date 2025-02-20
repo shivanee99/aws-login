@@ -28,7 +28,9 @@ jobs:
         shell: bash
 
       - name: Debug SSH Key (Check if it exists)
-        run: ls -l ~/.ssh && cat ~/.ssh/id_rsa || echo "SSH Key is missing"
-
+        run: |
+          ls -l ~/.ssh 
+          cat ~/.ssh/id_rsa
+          cd /home/ubuntu && ls
     
    
