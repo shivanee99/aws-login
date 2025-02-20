@@ -30,8 +30,8 @@ jobs:
       - name: Debug SSH Key (Check if it exists)
         run:  ls -l ~/.ssh
         
-      - name: connect-ec2       
+      - name: Debug SSH Key
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@13.232.75.140 
-          cd /home/ubuntu && ls -la
-   
+          ls -l ~/.ssh
+          cat ~/.ssh/id_rsa || echo "SSH Key is missing"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o IdentitiesOnly=yes ubuntu@13.232.75.140 "echo 'SSH Connection Successful'"
