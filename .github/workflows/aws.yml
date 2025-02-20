@@ -26,6 +26,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 3.111.34.109 >> ~/.ssh/known_hosts
 
+      - name: ssh-into-ec2
+        run: 
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.KNOWN_HOSTS }}
+
       
           
       
