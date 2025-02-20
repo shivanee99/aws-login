@@ -19,17 +19,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
           aws-region: us-east-1
 
-      - name: Set up SSH Key from Variables
+      - name: Set up SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PEM_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          echo "${{ secrets.EC2_PEM_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 13.232.75.140 >> ~/.ssh/known_hosts
-      
-      - name:  ec2-connect
-        run:
-         ssh -i ${{secrets.EC2_PEM_KEY}} ${{secrets.USER}}@13.232.75.140
-         cd /home/ubuntu
+
+      - name: Debug SSH Key (Check if it exists)
+        run: ls -la ~/.ssh && cat ~/.ssh/id_rsa || echo "SSH Key is missing"
+
+      - name: SSH into EC2 and Run Commands
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@13.232.75.140 << 'EOF'
+          echo "Connected to EC2"
+          ls -la /home/ubuntu
+          EOF
 
       
           
