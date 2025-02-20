@@ -7,19 +7,23 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted  # Ensure this matches the runner label in your EC2 instance
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Verify Runner Access
-        run: |
-          echo "Running on self-hosted EC2 instance"
-          whoami
-          hostname
+      - name: Set up SSH Key
+         run:|
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_PEM_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 13.232.75.140 >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.KNOWN_HOSTS }}
 
       - name: Run Deployment Commands
         run: |
-          cd /home/ubuntu
-          ls /home/ubuntu
-          git clone https://github.com/shivanee99/aws-login.git
+          sudo apt update
+          sudo apt install -y nginx
+          sudo systemctl start nginx
+          sudo systemctl enable nginx
+          
