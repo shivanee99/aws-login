@@ -28,7 +28,8 @@ jobs:
       
       - name: SSH-into-ec2
         run: |
-         ssh -i ~/.ssh/node.pem ubuntu@13.232.75.140 "ls -l /home/ubuntu"      
+         ssh -i ~/.ssh/node.pem ubuntu@13.232.75.140 
+         ls -la /home/ubuntu
 
 
 
