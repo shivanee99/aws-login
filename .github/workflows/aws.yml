@@ -1,4 +1,4 @@
-name: awslogin
+name: Deploy on Self-Hosted Runner
 
 on:
   push:
@@ -6,36 +6,19 @@ on:
       - main
 
 jobs:
-  aws-login:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: self-hosted  # Ensure this matches the runner label in your EC2 instance
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
-          aws-region: us-east-1
-
-      - name: Set up SSH Key
+      - name: Verify Runner Access
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PEM_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 13.232.75.140 >> ~/.ssh/known_hosts
+          echo "Running on self-hosted EC2 instance"
+          whoami
+          hostname
 
-      - name: Debug SSH Key (Check if it exists)
-        run: ls -la ~/.ssh && cat ~/.ssh/id_rsa || echo "SSH Key is missing"
-
-      - name: SSH into EC2 and Run Commands
+      - name: Run Deployment Commands
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@13.232.75.140 << 'EOF'
-          echo "Connected to EC2"
-          ls -la /home/ubuntu
-          EOF
-
-      
-          
-      
+          cd /home/ubuntu
+          ls /home/ubuntu
