@@ -31,9 +31,7 @@ jobs:
         run: |
           echo "Checking SSH Key..."
           ls -l ~/.ssh
-          echo "Key size:"
-          wc -c ~/.ssh/id_rsa
-          ssh -i ~/.ssh/id_rsa ubuntu@13.232.75.140 "ls -l /home/ubuntu"
+          cat ~/.ssh/id_rsa
           
           
       
