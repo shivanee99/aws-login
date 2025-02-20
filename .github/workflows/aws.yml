@@ -33,6 +33,7 @@ jobs:
           ls -l ~/.ssh
           cat ~/.ssh/id_rsa
       - name: connect-ec2   
+        run:   
            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@13.232.75.140 "ls -la /home/ubuntu"
           
       
