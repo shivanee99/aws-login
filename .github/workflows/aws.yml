@@ -31,5 +31,6 @@ jobs:
         run: |
           echo "Checking SSH Key..."
           ls -l ~/.ssh
-          cat ~/.ssh/id_rsa | head -5 || echo "SSH Key is missing"
+          echo "Key size:"
+          wc -c ~/.ssh/id_rsa
       
