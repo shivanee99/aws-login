@@ -28,9 +28,10 @@ jobs:
         shell: bash
 
       - name: Debug SSH Key (Check if it exists)
+        run:  ls -l ~/.ssh
+        
+      - name: connect-ec2       
         run: |
-          ls -l ~/.ssh 
-          cat ~/.ssh/id_rsa
-          cd /home/ubuntu && ls
-    
+          ssh -i ~/.ssh/id_rsa ubuntu@13.232.75.140 
+          cd /home/ubuntu && ls -la
    
