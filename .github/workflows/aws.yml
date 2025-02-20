@@ -24,7 +24,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ vars.EC2_PEM_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan your-ec2-public-ip >> ~/.ssh/known_hosts
+          ssh-keyscan 13.232.75.140 >> ~/.ssh/known_hosts
 
 
 
