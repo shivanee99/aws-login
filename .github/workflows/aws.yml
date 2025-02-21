@@ -13,7 +13,6 @@ jobs:
       AWS_EC2_SG_ID: sg-0bbc8f951e7ab8db1     # Security group ID for EC2
       AWS_EC2_INSTANCE_IP: 13.232.78.13   # Public IP of your EC2 instance
       SSH_USER: ubuntu                            # Update as per your EC2 instance user
-
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -36,10 +35,8 @@ jobs:
 
       - name: Connect to EC2 Instance and Execute Commands
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{secrets.SSH_PRIVATE_KEY}} ${{secrets.SSH_USER}}@${{secrets.AWS_EC2_INSTANCE_IP}} << 'EOF'
-          echo "Connected to EC2"
-          sudo apt update && sudo apt upgrade -y
-          EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@<AWS_EC2_INSTANCE_IP> "aws s3 ls"
+          
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
 
