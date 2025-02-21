@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy on Self-Hosted Runner
 
 on:
   push:
@@ -7,43 +7,18 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2
-    runs-on: ubuntu-latest
-    env:
-      AWS_EC2_SG_ID: sg-0bbc8f951e7ab8db1     # Security group ID for EC2
-      AWS_EC2_INSTANCE_IP: 13.232.78.13   # Public IP of your EC2 instance
-      SSH_USER: ubuntu                            # Update as per your EC2 instance user
+    runs-on: self-hosted  # Ensure this matches the runner label in your EC2 instance
     steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          aws-region: ap-south-1
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      - name: Get Runner Public IP
-        id: ip
-        uses: haythem/public-ip@v1.2
-
-      - name: Whitelist Runner IP in EC2 Security Group
+      - name: Verify Runner Access
         run: |
-          aws ec2 authorize-security-group-ingress \
-            --group-id $AWS_EC2_SG_ID \
-            --protocol tcp \
-            --port 22 \
-            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+          echo "Running on self-hosted EC2 instance"
+          whoami
+          hostname
 
-      - name: Connect to EC2 Instance and Execute Commands
+      - name: Run Deployment Commands
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@13.232.78.13 "aws s3 ls"
+          ls -la
           
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
-
-      - name: Revoke Runner IP from EC2 Security Group
-        run: |
-          aws ec2 revoke-security-group-ingress \
-            --group-id $AWS_EC2_SG_ID \
-            --protocol tcp \
-            --port 22 \
-            --cidr ${{ steps.ip.outputs.ipv4 }}/32
