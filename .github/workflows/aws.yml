@@ -15,10 +15,6 @@ jobs:
       - name: Verify Runner Access
         run: |
           echo "Running on self-hosted EC2 instance"
-          whoami
-          hostname
+          ls -la /home/ubuntu && sudo apt update
 
-      - name: Run Deployment Commands
-        run: |
-          ls -la
           
