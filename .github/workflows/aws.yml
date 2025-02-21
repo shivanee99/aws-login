@@ -21,11 +21,13 @@ jobs:
           aws-region: ap-south-1
 
      
-      - name: Install SSH
+      - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.SERVER_KEY }}
-          known_hosts: unnecessary
-
-      - name: connect to ec2
-        run: ssh -i ${{secrets.SSH_PRIVATE_KEY}} ${{secrets.USER}}@13.232.78.13 
+         key: ${{ secrets.SSH_PRIVATE_KEY }}
+         known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+          
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+             ssh -i -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@$13.232.78.13
+             ls -la
