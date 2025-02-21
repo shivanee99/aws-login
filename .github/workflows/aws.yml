@@ -36,10 +36,8 @@ jobs:
 
       - name: Connect to EC2 Instance and Execute Commands
         run: |
-          ssh -o StrictHostKeyChecking=no $SSH_USER@$AWS_EC2_INSTANCE_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ${{secrets.SSH_PRIVATE_KEY}} ${{secrets.SSH_USER}}@${{secrets.AWS_EC2_INSTANCE_IP}} << 'EOF'
           echo "Connected to EC2"
-          # Add your deployment commands here
-          # Example: Pull latest code, restart services
           sudo apt update && sudo apt upgrade -y
           EOF
         env:
