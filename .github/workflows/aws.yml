@@ -1,24 +1,54 @@
+name: Deploy to EC2
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  check-ip-address:
+  deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
-    steps:
-      - name: Get Runner IP
-        run: curl ifconfig.me
-        
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    env:
+      AWS_EC2_SG_ID: sg-0bbc8f951e7ab8db1     # Security group ID for EC2
+      AWS_EC2_INSTANCE_IP: 13.232.78.13   # Public IP of your EC2 instance
+      SSH_USER: ubuntu                            # Update as per your EC2 instance user
 
-      - name: Configure AWS credentials
+    steps:
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           aws-region: ap-south-1
 
-     
-     
+      - name: Get Runner Public IP
+        id: ip
+        uses: haythem/public-ip@v1.2
+
+      - name: Whitelist Runner IP in EC2 Security Group
+        run: |
+          aws ec2 authorize-security-group-ingress \
+            --group-id $AWS_EC2_SG_ID \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      - name: Connect to EC2 Instance and Execute Commands
+        run: |
+          ssh -o StrictHostKeyChecking=no $SSH_USER@$AWS_EC2_INSTANCE_IP << 'EOF'
+          echo "Connected to EC2"
+          # Add your deployment commands here
+          # Example: Pull latest code, restart services
+          sudo apt update && sudo apt upgrade -y
+          EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
+
+      - name: Revoke Runner IP from EC2 Security Group
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id $AWS_EC2_SG_ID \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
