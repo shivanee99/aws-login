@@ -29,5 +29,5 @@ jobs:
           
       - name: Adding Known Hosts
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-             ssh -i -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@$13.232.78.13
+             ssh -i -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{SSH_HOST}}
              ls -la
